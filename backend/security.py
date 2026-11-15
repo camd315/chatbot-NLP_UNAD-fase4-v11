@@ -1,10 +1,10 @@
-"""Extensión preventiva conservadora compatible con V11.
+"""Capa preventiva V11: emergencias directas y orientación sobre terceras personas.
 
-Las reglas V11 originales permanecen intactas. Esta capa añade reconocimiento
-contextual de solicitudes de auxilio formuladas sobre terceras personas.
-No se realizan llamadas externas ni se almacenan datos personales.
+Conserva las reglas del módulo seguridad_v11_original y agrega detección
+contextual sin utilizar LLM ni recuperar documentos.
 """
 import re
+
 from .seguridad_v11_original import (
     respuesta_preventiva_v11,
     normalizar_alerta_v11,
@@ -18,57 +18,102 @@ REVIEW_MESSAGE = (
     "Esta aplicación no contacta autoridades ni reemplaza servicios humanos."
 )
 
-# Un concepto aislado ("violencia", "urgencia") no es suficiente para alertar.
-# Es necesario identificar a alguien afectado + evidencia contextual de riesgo.
-AFECTADA = re.compile(
-    r"\b(?:una mujer|la mujer|esta mujer|mi amiga|una amiga|mi hermana|mi madre|"
-    r"mi hija|mi vecina|una persona|la victima|alguien|ella)\b"
+RESPUESTA_TERCERA_PERSONA = (
+    "Si una persona cercana está viviendo violencia, escucha sin juzgar, "
+    "evita confrontar al agresor y pregúntale cómo puedes apoyarla sin aumentar su riesgo. "
+    "En Colombia puede solicitar orientación sobre violencias de género en la línea 155. "
+    "Si hay peligro inmediato, llama al 123 cuando sea seguro hacerlo. "
+    "Este chatbot no contacta automáticamente a las autoridades."
 )
-RIESGO_TERCEROS = re.compile(
-    r"\b(?:situacion(?:es)? de violencia|violencia (?:fisica|sexual|de genero)|"
-    r"siendo (?:golpead[ao]|agredid[ao]|amenazad[ao])|la estan (?:golpeando|"
-    r"agrediendo|amenazando)|la quieren matar|esta en peligro|corre peligro|"
-    r"riesgo inmediato|amenaza de muerte|maltrato)\b"
+
+RESPUESTA_TERCERA_PERSONA_URGENTE = (
+    "Si tu familiar o conocida está en peligro inmediato, prioriza su seguridad "
+    "y la tuya. No confrontes al agresor ni te expongas. "
+    "En Colombia, puedes llamar al 123 si es seguro hacerlo; "
+    "para orientación sobre violencias de género, 155. "
+    "Este chatbot no contacta automáticamente a las autoridades."
 )
-AYUDA_APREMIANTE = re.compile(
-    r"\b(?:necesita(?:n)?|requiere(?:n)?|pide(?:n)?|busca(?:n)?) "
-    r"(?:ayuda|auxilio|proteccion|apoyo)(?: (?:urgente|inmediata|ahora|ya))?\b|"
-    r"\b(?:urgente|urgencia|inmediato|inmediata|ahora mismo)\b|"
-    r"\b(?:a donde (?:puede|debe) acudir|como (?:la|le) (?:ayudo|ayudamos)|"
-    r"como (?:puedo|podemos) ayudarla|a quien (?:puede|debe) llamar)\b"
-)
-# Evita marcar como una urgencia actual las preguntas puramente definicionales.
+
+# Las expresiones se evalúan sobre texto minúsculo y sin tildes.
 CONSULTA_ABSTRACTA = re.compile(
     r"^(?:que (?:es|significa)|define|explica|cual es la definicion|"
     r"como funciona|escribe (?:un|una)|redacta (?:un|una)|"
     r"dame (?:un|una) ejemplo)\b"
 )
+RIESGO_DIRECTO = re.compile(
+    r"\b(?:estoy siendo (?:golpead[ao]|agredid[ao]|atacad[ao]|amenazad[ao])|"
+    r"(?:me|nos) (?:estan|esta) (?:golpeando|agrediendo|atacando|amenazando)|"
+    r"(?:mi pareja|mi esposo|mi novio|mi ex) me (?:golpea|agrede|amenaza))\b"
+)
+NEGACION_DIRECTA = re.compile(
+    r"\b(?:no estoy siendo|no me estan|no me esta)\s+"
+    r"(?:golpead[ao]|agredid[ao]|atacad[ao]|amenazad[ao]|"
+    r"golpeando|agrediendo|atacando|amenazando)\b"
+)
+TERCERA_PERSONA = re.compile(
+    r"\b(?:mi hermana|mi hermano|mi madre|mi mama|mi hija|mi hijo|"
+    r"mi amiga|mi amigo|mi vecina|mi vecino|mi familiar|"
+    r"una mujer|la mujer|esta mujer|una persona|ella)\b"
+)
+RIESGO_TERCERO = re.compile(
+    r"\b(?:esta siendo|estan siendo|es) (?:golpead[ao]|agredid[ao]|"
+    r"amenazad[ao]|maltratad[ao])\b|"
+    r"\b(?:la|lo) estan (?:golpeando|agrediendo|amenazando)\b|"
+    r"\b(?:sufre|vive|esta viviendo) (?:violencia|maltrato)\b|"
+    r"\b(?:violencia psicologica|violencia fisica|violencia sexual|"
+    r"maltrato|amenaza de muerte|la quieren matar)\b"
+)
+URGENCIA_ACTUAL = re.compile(
+    r"\b(?:ahora mismo|en este momento|esta en peligro inmediato|"
+    r"corre peligro inmediato|la quieren matar ahora|"
+    r"su vida esta en peligro|necesita ayuda urgente)\b"
+)
+
+def _resultado(ruta, clasificacion, respuesta, regla):
+    return {
+        "ruta": ruta,
+        "clasificacion": clasificacion,
+        "respuesta": respuesta,
+        "qwen_ejecutado": False,
+        "rag_ejecutado": False,
+        "embeddings_ejecutados": False,
+        "regla": regla,
+    }
 
 
 def evaluate(text):
-    """Reglas originales primero; alerta contextual adicional antes de RAG.
-
-    La extensión es un tamiz de seguridad, no la clasificación semántica completa
-    de V11 que dependía de las 32 referencias de V10.
-    """
-    original = respuesta_preventiva_v11(text)
-    if original["ruta"] == "SEGURIDAD_INMEDIATA_189":
-        return original
+    """Clasifica primero el riesgo; no ejecuta recuperación ni modelos."""
     normalizado = normalizar_alerta_v11(text)
-    if (
-        normalizado
-        and not CONSULTA_ABSTRACTA.search(normalizado)
-        and AFECTADA.search(normalizado)
-        and RIESGO_TERCEROS.search(normalizado)
-        and AYUDA_APREMIANTE.search(normalizado)
-    ):
-        return {
-            "ruta": "SEGURIDAD_INMEDIATA_189",
-            "clasificacion": "posible_urgencia",
-            "respuesta": RESPUESTA_ALERTA_INMEDIATA_V11,
-            "qwen_ejecutado": False,
-            "rag_ejecutado": False,
-            "embeddings_ejecutados": False,
-            "regla": "riesgo_tercera_persona_contextual_v11_ext",
-        }
-    return original
+    if not normalizado:
+        return respuesta_preventiva_v11(text)
+
+    # Evita alertas por preguntas puramente definicionales.
+    abstracta = bool(CONSULTA_ABSTRACTA.search(normalizado))
+
+    # Una agresión expresada en primera persona prevalece aunque se mencione
+    # a un familiar en el resto del mensaje.
+    if (not abstracta and RIESGO_DIRECTO.search(normalizado)
+            and not NEGACION_DIRECTA.search(normalizado)):
+        return _resultado(
+            "SEGURIDAD_INMEDIATA_189", "posible_urgencia",
+            RESPUESTA_ALERTA_INMEDIATA_V11, "riesgo_directo_v11_ext"
+        )
+
+    # Preguntas concretas sobre otra persona: respuesta de apoyo adecuada;
+    # no suponer que quien consulta es la víctima.
+    if (not abstracta and TERCERA_PERSONA.search(normalizado)
+            and RIESGO_TERCERO.search(normalizado)):
+        if URGENCIA_ACTUAL.search(normalizado):
+            return _resultado(
+                "SEGURIDAD_INMEDIATA_189", "posible_urgencia_tercero",
+                RESPUESTA_TERCERA_PERSONA_URGENTE,
+                "riesgo_inmediato_tercera_persona_v11_ext"
+            )
+        return _resultado(
+            "ORIENTACION_PREVENTIVA_V11", "orientacion_tercera_persona",
+            RESPUESTA_TERCERA_PERSONA,
+            "orientacion_tercera_persona_v11_ext"
+        )
+
+    # Mantener el resto de los criterios conservadores originales.
+    return respuesta_preventiva_v11(text)
