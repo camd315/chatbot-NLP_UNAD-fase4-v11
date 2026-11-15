@@ -362,8 +362,11 @@ if question:
         st.session_state.chat_session
     )
 
-    emergency = (
-        result["route"] == "SEGURIDAD_INMEDIATA_189"
+    # Tratar ambas rutas preventivas como conversaciones sensibles.
+    # El historial visible se limpia y no conserva el relato.
+    emergency = result["route"] in (
+        "SEGURIDAD_INMEDIATA_189",
+        "ORIENTACION_PREVENTIVA_V11",
     )
 
     # Frente a una urgencia se limpia el historial interno
