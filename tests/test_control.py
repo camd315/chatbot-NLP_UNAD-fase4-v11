@@ -61,5 +61,26 @@ class ControlTests(unittest.TestCase):
         response = self.bot.reply('¿Qué derechos reconoce la Ley 1257 de 2008?', self.session)
         self.assertEqual(response['route'], 'DOCUMENTACION_PENDIENTE')
 
+    def test_emergency_clears_previous_memory(self):
+        self.session.history.append({
+            'topic': 'antecedente_academico'
+        })
+    
+        self.assertEqual(len(self.session.history), 1)
+    
+        response = self.bot.respond(
+            'Mi hermana está siendo golpeada y necesita ayuda urgente.',
+            self.session
+        )
+    
+        self.assertEqual(
+            response['route'],
+            'SEGURIDAD_INMEDIATA_189'
+        )
+    
+        self.assertEqual(len(self.session.history), 0)
+        self.assertEqual(response['memory'], 0)
+        self.assertFalse(response['qwen_executed'])
+
 if __name__ == '__main__':
     unittest.main()
