@@ -619,7 +619,16 @@ for msg in st.session_state.messages:
 # 12. INTERACCIÓN CON EL ASISTENTE
 # ============================================================
 
+
 question = st.chat_input("Escribe aquí tu consulta...")
+
+if question:
+    st.session_state.pop("pregunta_sugerida", None)
+else:
+    question = st.session_state.pop(
+        "pregunta_sugerida", None
+    )
+
 
 if question:
     with st.chat_message("user"):
