@@ -557,6 +557,56 @@ if st.button("Nueva conversación", use_container_width=False):
     st.session_state.messages = []
     st.rerun()
 
+# ========================================================
+
+# ============================================================
+# PREGUNTAS SUGERIDAS PARA ORIENTAR A LAS PERSONAS
+# ============================================================
+
+st.markdown("### ¿No sabes por dónde empezar?")
+st.write(
+    "Selecciona una pregunta de tu interés o escribe "
+    "tu propia consulta en el espacio de conversación."
+)
+
+preguntas_sugeridas = {
+    "🌷 Autonomía femenina": [
+        "¿Cómo puedo fortalecer mi autoestima?",
+        "¿Cómo puedo tomar decisiones con mayor seguridad?",
+        "¿Qué es el autoconocimiento y cómo puedo desarrollarlo?"
+    ],
+    "🛡️ Prevención de violencias": [
+        "¿Cuáles son las señales de violencia psicológica?",
+        "¿Qué tipos de violencia contra las mujeres existen?",
+        "¿Cómo puedo identificar la violencia económica?"
+    ],
+    "🏛️ Orientación institucional": [
+        "¿Dónde puedo recibir orientación institucional en Cali?",
+        "¿Qué derechos reconoce la Ley 1257 de 2008 a las mujeres?",
+        "¿Qué es Casa Matria y dónde puedo recibir orientación en Cali?"
+    ]
+}
+
+with st.expander("💬 Explorar preguntas sugeridas", expanded=True):
+    pestanas = st.tabs(list(preguntas_sugeridas.keys()))
+
+    for indice, (categoria, preguntas) in enumerate(
+        preguntas_sugeridas.items()
+    ):
+        with pestanas[indice]:
+            for numero, pregunta in enumerate(preguntas):
+                if st.button(
+                    pregunta,
+                    key=f"sugerida_{indice}_{numero}",
+                    use_container_width=True
+                ):
+                    st.session_state["pregunta_sugerida"] = pregunta
+
+# ============================================================
+# FIN DE PREGUNTAS SUGERIDAS
+# ============================================================
+
+
 # ============================================================
 # 11. VISUALIZACIÓN DEL HISTORIAL
 # ============================================================
