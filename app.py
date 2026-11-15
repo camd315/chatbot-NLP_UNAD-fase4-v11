@@ -23,6 +23,119 @@ st.set_page_config(
     layout="centered"
 )
 
+# ===============================
+
+
+# ============================================================
+# DIAGNOSTICO PRIVADO DE CHROMADB V11
+# No habilita respuestas documentales al publico.
+# ============================================================
+
+if st.secrets.get("V11_DIAGNOSTIC_ENABLED", False):
+
+    @st.cache_resource(show_spinner=False)
+    def verificar_chromadb_v11():
+        try:
+            from pathlib import Path
+            import chromadb
+
+            from backend.private_db import preparar_base_privada
+            from backend.rag import V11Retriever
+
+            print(
+                "V11_DIAG: Iniciando prueba privada",
+                flush=True
+            )
+
+            ruta = preparar_base_privada(
+                token=st.secrets["GITHUB_PRIVATE_TOKEN"],
+                repo=st.secrets["GITHUB_PRIVATE_REPO"],
+                branch=st.secrets["GITHUB_PRIVATE_BRANCH"],
+                destino=SETTINGS.chroma_path
+            )
+
+            ruta = Path(ruta)
+
+            if not (ruta / "chroma.sqlite3").is_file():
+                raise RuntimeError("SQLite no encontrado")
+
+            indices = list(ruta.glob("*/header.bin"))
+
+            if not indices:
+                raise RuntimeError("Indice vectorial no encontrado")
+
+            print(
+                "V11_DIAG: Descarga y archivos OK",
+                flush=True
+            )
+
+            cliente = chromadb.PersistentClient(
+                path=str(ruta)
+            )
+
+            colecciones = cliente.list_collections()
+
+            if len(colecciones) != 1:
+                raise RuntimeError(
+                    "Se esperaba una sola coleccion"
+                )
+
+            coleccion = cliente.get_collection(
+                name=colecciones[0].name
+            )
+
+            cantidad = coleccion.count()
+
+            print(
+                f"V11_DIAG: Fragmentos={cantidad}",
+                flush=True
+            )
+
+            if cantidad != 173:
+                raise RuntimeError(
+                    "Cantidad de fragmentos incorrecta"
+                )
+
+            recuperador = V11Retriever(db_path=ruta)
+
+            resultados = recuperador.retrieve(
+                "¿Qué derechos reconoce la Ley 1257 de 2008?",
+                k=4
+            )
+
+            if not resultados:
+                raise RuntimeError(
+                    "La consulta vectorial no devolvio resultados"
+                )
+
+            print(
+                "V11_DIAG: Recuperacion vectorial OK",
+                flush=True
+            )
+
+            print(
+                "V11_DIAG: VALIDACION EXITOSA",
+                flush=True
+            )
+
+            # No se devuelven fragmentos ni documentos.
+            return True
+
+        except Exception as exc:
+            print(
+                "V11_DIAG: ERROR "
+                + type(exc).__name__,
+                flush=True
+            )
+            return False
+
+    verificar_chromadb_v11()
+
+# ============================================================
+# FIN DEL DIAGNOSTICO PRIVADO
+# ============================================================
+
+
 # ============================================================
 # 2. PRESENTACIÓN PRINCIPAL
 # ============================================================
