@@ -1,47 +1,28 @@
-# Chatbot NLP UNAD · Fase 4 · adaptación controlada V11
+# Chatbot NLP UNAD – Fase 4 V11 / Despliegue controlado
 
-## Procedencia y límites
+Esta versión es una **demostración pública académica** con recuperación semántica real mediante
+`intfloat/multilingual-e5-small` (384 dimensiones) y ChromaDB en memoria. Las ocho fichas de
+`data/demo/` son contenido educativo original redactado para el prototipo; **NO** son los 173
+fragmentos originales del ejercicio 2, ni representan documentos institucionales.
 
-Adaptación de la entrega del Ejercicio 2. Se conserva el archivo de reglas preventivas V11,
-el control de abstención, el ensamblaje jurídico validado y la restricción de publicación
-de borradores Qwen. **No se afirma equivalencia funcional completa**: las 32 referencias
-semánticas se recuperaban del notebook V10, que NO está en el ZIP suministrado.
-Las respuestas automáticas abiertas están expresamente deshabilitadas.
+## Alcance
+- Reglas preventivas originales V11 más corrección contextual de consultas en tercera persona.
+- Prioridad de posible urgencia, reinicio de metadatos de memoria y abstención ante falta de evidencia.
+- Búsqueda vectorial E5 + ChromaDB, con respuestas extractivas y citas de fichas didácticas.
+- Qwen **no se ejecuta ni publica**. El cuaderno V11 había reportado generación experimental,
+  no un servicio listo para producción. El clasificador semántico V10 completo tampoco se reproduce.
+- La modalidad documental V11 original se mantiene bloqueada hasta que se verifique el permiso
+  de redistribución de cada fuente y el corpus se instale fuera de un repositorio público.
 
-## Ejecutar localmente
+## Despliegue
+Ver `DEPLOY.md`. Ejecutar `python -m unittest discover -s tests -v` para pruebas del controlador.
+La descarga inicial del modelo E5 depende de acceso de red y recursos disponibles en Streamlit.
 
-1. Crear entorno Python 3.11 (recomendado), activar y ejecutar `pip install -r requirements.txt`.
-2. Iniciar con `streamlit run app.py`.
-3. Sin corpus autorizado, la aplicación responde a alertas V11 y se abstiene de consultas documentales.
-4. Para ensayar con un corpus **auditado y autorizado para publicación**, copiar la estructura completa
-   de ChromaDB V11 a `data/chroma_db/` (archivo `chroma.sqlite3` y carpeta del índice),
-   y establecer `AUTHORIZED_PUBLIC_CORPUS=true` en el entorno del proceso.
-5. Verificar los 173 registros, el modelo de embeddings y el rendimiento del servidor.
+## Consultas recomendadas
+`¿Qué es RAG?`, `¿Qué es un embedding?`, `¿Para qué sirve ChromaDB?`,
+`¿Cómo se evalúa un chatbot?`, `¿Qué es la violencia psicológica?` (abstención),
+`Mi hermana está siendo golpeada y necesita ayuda urgente` (control preventivo).
 
-### Publicación en Streamlit Community Cloud
-
-Subir a GitHub solamente archivos de código revisados, sin `data/`, `.env`, PDFs ni notebooks.
-Elegir rama `main`, archivo `app.py` y desplegar. Por defecto el corpus no está disponible;
-para disponer de RAG público se requiere primero una base redactada, verificada y autorizada,
-y decidir una distribución segura. **No publique el ZIP original de ChromaDB.**
-
-## Arquitectura
-
-Streamlit → controlador seguro → módulo de urgencias V11 → rutas documentales exactas
-→ (si se autoriza) E5 + ChromaDB V11 → comprobación de evidencia → respuesta.
-Qwen está desactivado deliberadamente: no se publica texto experimental no validado.
-
-## Ensayos
-
-`python -m unittest discover -s tests -v`
-
-## Advertencias
-
-Sistema académico, no servicio de emergencias. Teléfonos y normas pueden cambiar. No guardar
-preguntas personales en registros. El almacenamiento de historial en la pantalla es por sesión;
-las consultas de emergencia no se retienen intencionadamente.
-
-## Requisitos UNAD aún pendientes
-
-Verificar control semántico completo con referencias V10, auditoría documental, despliegue real,
-10 tareas de prueba, retroalimentación de usuarios, análisis de 3 problemas sistemáticos e informe APA.
+## Privacidad
+No registrar ni subir preguntas de personas reales. No publicar datos, claves, archivos
+originales, el ZIP del ejercicio 2 ni la base de 173 fragmentos sin autorización verificable.
