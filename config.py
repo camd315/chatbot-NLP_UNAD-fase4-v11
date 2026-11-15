@@ -11,6 +11,17 @@ class Settings:
     collection_name: str = os.environ.get("CHROMA_COLLECTION_NAME", "")
     chroma_path: Path = ROOT / "data" / "chroma_db"
     top_k: int = 4
+    # Modelo LLM abierto utilizado en el ejercicio 2.
+    # Declararlo no habilita su ejecución en Streamlit.
+    llm_model: str = "Qwen/Qwen2.5-1.5B-Instruct"
+
+    # Parámetros de generación propuestos para futuras pruebas.
+    llm_temperature: float = 0.2
+    llm_max_new_tokens: int = 256
+
+    # Configuración del recuperador RAG educativo público.
+    demo_collection_name: str = "demo_academica_original_v1"
+    demo_top_k: int = 1
     history_limit: int = 4
     # Solo habilitar tras auditoría jurídica y de privacidad del corpus.
     authorized_corpus: bool = os.environ.get("AUTHORIZED_PUBLIC_CORPUS", "false").lower() == "true"
