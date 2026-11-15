@@ -1,11 +1,11 @@
 
-"""Streamlit – Ejercicio 3 / UNAD Fase 4.
+"""Interfaz Streamlit – UNAD NLP Fase 4.
 
-Prototipo académico orientado a la autonomía femenina,
-la prevención de violencias y la orientación institucional
+Prototipo académico de autonomía femenina,
+prevención de violencias y orientación institucional
 en Santiago de Cali.
 
-Despliegue público con demostración RAG controlada.
+Despliegue con recuperación documental controlada.
 """
 
 import streamlit as st
@@ -16,238 +16,225 @@ from backend.rag import V11Retriever
 
 
 # ============================================================
-# 1. CONFIGURACIÓN GENERAL DE LA INTERFAZ
+# 1. CONFIGURACIÓN GENERAL
 # ============================================================
 
 st.set_page_config(
-    page_title="Autonomía femenina y prevención de violencias · UNAD",
-    page_icon="💬",
+    page_title="Autonomía femenina y prevención de violencias",
+    page_icon="💜",
     layout="centered"
 )
 
-st.title("Asistente de autonomía femenina y prevención de violencias")
 
-st.caption(
-    "Prototipo académico de inteligencia artificial | "
-    "UNAD · Natural Language Processing · Fase 4"
+# ============================================================
+# 2. PRESENTACIÓN PRINCIPAL
+# ============================================================
+
+st.title(
+    "Asistente de autonomía femenina "
+    "y prevención de violencias"
 )
 
-
-# ============================================================
-# 2. PRESENTACIÓN Y PROPÓSITO DEL CHATBOT
-# ============================================================
+st.caption(
+    "Prototipo educativo y preventivo | "
+    "UNAD · Santiago de Cali"
+)
 
 st.markdown("""
-### Bienvenida al asistente
+### Bienvenida
 
-Este chatbot es un prototipo académico de inteligencia artificial
-desarrollado en el marco del curso **Natural Language Processing**
-de la Universidad Nacional Abierta y a Distancia (UNAD).
+Este espacio ha sido diseñado como un prototipo académico
+de inteligencia artificial para facilitar el acceso
+a información educativa y preventiva.
 
-Su propósito es contribuir al fortalecimiento de la autonomía
-femenina, la prevención de violencias de género y el acceso
-a información sobre derechos y servicios institucionales
-de orientación disponibles en **Santiago de Cali**.
+Su propósito es contribuir al fortalecimiento de la
+**autonomía femenina**, la **prevención de violencias
+de género** y el conocimiento de los **derechos y
+servicios institucionales de orientación en Santiago de Cali**.
 
-Está concebido principalmente para mujeres mayores de 18 años
-interesadas en acceder a información educativa y preventiva.
+Está dirigido principalmente a mujeres mayores de 18 años
+y a personas interesadas en estos temas desde una
+perspectiva educativa y comunitaria.
 """)
 
 
 # ============================================================
-# 3. EJES TEMÁTICOS DEL PROYECTO
+# 3. ALCANCE DEL PROYECTO: TRES EJES TEMÁTICOS
+# ============================================================
+
+st.markdown("### Nuestros ejes de orientación")
+
+with st.container(border=True):
+
+    st.markdown("#### 🌷 Autonomía femenina")
+
+    st.write(
+        "Promover conocimientos relacionados con "
+        "el autoconocimiento, la autoestima, "
+        "los límites personales, la toma de decisiones "
+        "y las relaciones saludables."
+    )
+
+with st.container(border=True):
+
+    st.markdown("#### 🛡️ Prevención de violencias")
+
+    st.write(
+        "Facilitar información educativa para comprender "
+        "los conceptos, manifestaciones y señales generales "
+        "de violencia de género, incluyendo conductas "
+        "de control, manipulación y aislamiento."
+    )
+
+with st.container(border=True):
+
+    st.markdown("#### 🏛️ Orientación institucional")
+
+    st.write(
+        "Facilitar el conocimiento de derechos, "
+        "entidades, servicios y rutas oficiales "
+        "de orientación disponibles en Santiago de Cali, "
+        "mediante información pública verificable."
+    )
+
+
+# ============================================================
+# 4. INSTRUCCIONES DE USO
 # ============================================================
 
 with st.expander(
-    "Conoce los tres ejes temáticos del proyecto",
-    expanded=True
-):
-
-    st.markdown("""
-    **1. Autonomía femenina**
-
-    Información educativa sobre:
-
-    - Autoconocimiento y autoestima.
-    - Límites personales.
-    - Toma de decisiones.
-    - Relaciones saludables.
-
-    **2. Prevención de violencias**
-
-    Información general sobre:
-
-    - Conceptos de violencia de género.
-    - Manifestaciones de violencia.
-    - Señales generales de control y manipulación.
-    - Reconocimiento de conductas abusivas.
-
-    **3. Orientación institucional**
-
-    Información sobre:
-
-    - Derechos de las mujeres.
-    - Servicios institucionales de orientación.
-    - Entidades y canales oficiales.
-    - Rutas de orientación disponibles en Santiago de Cali.
-
-    **Importante:** estos ejes corresponden al alcance previsto
-    del proyecto. La disponibilidad de respuestas depende
-    de las fuentes documentales habilitadas.
-    """)
-
-
-# ============================================================
-# 4. INSTRUCCIONES PARA UTILIZAR EL CHATBOT
-# ============================================================
-
-with st.expander(
-    "¿Cómo utilizar el chatbot?",
-    expanded=True
-):
-
-    st.markdown("""
-    **Instrucciones de uso**
-
-    1. Escribe una pregunta en el cuadro de conversación
-       ubicado en la parte inferior de la pantalla.
-    2. Presiona **Enter** para enviar la consulta.
-    3. Lee la respuesta proporcionada por el asistente.
-    4. Cuando exista información documental disponible,
-       revisa la fuente indicada.
-    5. Puedes formular nuevas preguntas dentro
-       de la misma conversación.
-    6. Selecciona **Nueva conversación** para comenzar
-       una interacción diferente.
-
-    **Privacidad**
-
-    Evita incluir nombres completos, documentos de identidad,
-    direcciones, teléfonos o relatos íntimos en tus consultas.
-    """)
-
-
-# ============================================================
-# 5. ESTADO ACTUAL DE LA DEMOSTRACIÓN
-# ============================================================
-
-with st.expander(
-    "Estado de la versión pública y sus limitaciones",
+    "¿Cómo utilizar el asistente?",
     expanded=False
 ):
 
     st.markdown("""
-    **Funcionalidades actualmente disponibles**
+    Puedes escribir tu consulta en el cuadro
+    de conversación ubicado en la parte inferior.
 
-    Esta versión pública permite comprobar:
+    El asistente procesará tu mensaje y ofrecerá
+    información según las funcionalidades
+    y fuentes que estén disponibles.
 
-    - El funcionamiento de la interfaz conversacional.
-    - La recuperación semántica mediante E5 y ChromaDB.
-    - La identificación de fuentes educativas recuperadas.
-    - El control de respuestas sin información suficiente.
-    - Determinadas reglas preventivas de orientación.
-    - La gestión temporal de memoria conversacional.
+    Cuando una respuesta esté respaldada por una
+    fuente documental, se mostrará su referencia.
 
-    **Alcance documental actual**
+    Si no existe información validada, el sistema
+    te indicará que no dispone de una respuesta.
 
-    La demostración utiliza ocho fichas educativas originales
-    sobre tecnologías de inteligencia artificial y funcionamiento
-    del prototipo.
+    **Privacidad y protección de datos**
 
-    Estas fichas permiten evaluar el componente tecnológico,
-    pero **no sustituyen la base documental especializada**
-    sobre autonomía femenina, prevención de violencias
-    y orientación institucional.
+    Evita compartir nombres completos,
+    documentos de identidad, direcciones,
+    teléfonos o relatos personales íntimos.
 
-    **Componentes todavía no habilitados públicamente**
-
-    - Base documental especializada V11.
-    - Generación abierta de respuestas mediante Qwen.
-    - Consulta en tiempo real de servicios institucionales.
-
-    **Limitaciones del chatbot**
-
-    El asistente no realiza diagnósticos psicológicos,
-    asesoría jurídica personalizada, clasificación individual
-    del riesgo, denuncias automáticas ni atención de emergencias.
-
-    Las respuestas pueden presentar errores y deben contrastarse
-    con fuentes oficiales o profesionales especializados
-    cuando corresponda.
-
-    El sistema no contacta automáticamente a instituciones
-    ni autoridades.
+    Puedes seleccionar **Nueva conversación**
+    para reiniciar la interacción.
     """)
 
 
 # ============================================================
-# 6. CONSULTAS DISPONIBLES PARA PROBAR EL PROTOTIPO
+# 5. ALCANCE Y LIMITACIONES DE LA VERSIÓN ACTUAL
 # ============================================================
 
 with st.expander(
-    "Preguntas sugeridas para evaluar esta demostración",
+    "Alcance y limitaciones de esta versión",
     expanded=False
 ):
 
     st.markdown("""
-    Para comprobar la recuperación documental de esta
-    versión pública puedes utilizar las siguientes preguntas:
+    **Objetivo del proyecto**
 
-    - ¿Qué es RAG?
-    - ¿Qué es un embedding?
-    - ¿Para qué sirve ChromaDB?
-    - ¿Cómo se evalúa un chatbot?
+    Desarrollar un chatbot educativo y preventivo
+    sobre autonomía femenina, prevención de
+    violencias y orientación institucional.
 
-    **Nota:** estas preguntas son pruebas técnicas del sistema.
-    No representan los tres ejes temáticos finales del proyecto.
+    **Estado actual**
 
-    Las consultas relacionadas con autonomía femenina,
-    prevención de violencias y orientación institucional
-    requieren el corpus especializado para ofrecer respuestas
-    documentales completas y verificables.
+    Esta versión pública se encuentra en etapa
+    de demostración y validación tecnológica.
+
+    Actualmente permite:
+
+    - Utilizar una interfaz conversacional.
+    - Probar la recuperación documental mediante
+      un conjunto limitado de fichas educativas
+      técnicas de demostración.
+    - Aplicar determinadas reglas de orientación
+      preventiva ante consultas sensibles.
+    - Reconocer cuando no existe información
+      documental suficiente.
+    - Gestionar temporalmente el contexto
+      de algunas interacciones.
+
+    **Funcionalidades aún no habilitadas**
+
+    - Recuperación completa del corpus especializado
+      sobre los tres ejes del proyecto.
+    - Generación abierta mediante Qwen.
+    - Consulta de servicios institucionales
+      actualizados en tiempo real.
+
+    Las fichas de demostración actuales son de
+    carácter técnico y no sustituyen el contenido
+    educativo especializado del proyecto.
+
+    **Límites de atención**
+
+    El sistema no realiza diagnósticos psicológicos,
+    asesoría jurídica personalizada, clasificación
+    individual del riesgo, denuncias automáticas
+    ni atención de emergencias.
+
+    Tampoco contacta automáticamente a profesionales
+    o autoridades.
+
+    Sus respuestas deben contrastarse con fuentes
+    oficiales cuando corresponda.
     """)
 
 
-st.info(
-    "Este chatbot es un prototipo académico en evaluación. "
-    "No reemplaza servicios profesionales, orientación jurídica "
-    "ni atención de emergencias."
+st.caption(
+    "Este asistente es un prototipo académico en evaluación. "
+    "No sustituye la atención profesional, la orientación "
+    "jurídica personalizada ni los servicios de emergencia."
 )
 
 
 # ============================================================
-# 7. CARGA DE LA BASE DOCUMENTAL ORIGINAL V11
+# 6. CARGA DEL CORPUS ESPECIALIZADO V11
 # ============================================================
 
 @st.cache_resource(show_spinner=False)
 def load_original():
 
     if not SETTINGS.authorized_corpus:
+
         return (
             None,
-            "Base documental especializada V11 no habilitada: "
-            "pendientes las autorizaciones de publicación."
+            "Contenido documental especializado "
+            "pendiente de habilitación."
         )
 
     try:
+
         ret = V11Retriever()
 
         return (
             ret,
-            "Corpus documental V11 autorizado cargado "
-            "(173 fragmentos)."
+            "Base documental especializada disponible."
         )
 
     except Exception as exc:
 
         return (
             None,
-            "Corpus V11 no disponible: " + type(exc).__name__
+            "La base documental especializada "
+            "no está disponible: " + type(exc).__name__
         )
 
 
 # ============================================================
-# 8. CARGA DEL RAG EDUCATIVO DE DEMOSTRACIÓN
+# 7. CARGA DE LA DEMOSTRACIÓN RAG
 # ============================================================
 
 @st.cache_resource(show_spinner=False)
@@ -257,25 +244,23 @@ def load_demo():
 
         return (
             None,
-            "Demostración RAG deshabilitada."
+            "Demostración documental deshabilitada."
         )
 
     from backend.demo_rag import DemoRetriever
 
     return (
         DemoRetriever(),
-        "Demostración educativa RAG activa "
-        "(8 fichas originales)."
+        "Componente de recuperación documental "
+        "de demostración disponible."
     )
 
 
 # ============================================================
-# 9. INICIALIZACIÓN DE LOS COMPONENTES
+# 8. INICIALIZACIÓN DE COMPONENTES
 # ============================================================
 
 original, status = load_original()
-
-st.info(status)
 
 demo = None
 
@@ -284,29 +269,51 @@ if SETTINGS.demo_rag_enabled:
     try:
 
         with st.spinner(
-            "Cargando modelo de embeddings E5 "
-            "para la demostración…"
+            "Preparando el asistente..."
         ):
 
             demo, demo_status = load_demo()
 
-        st.success(demo_status)
-
     except Exception as exc:
 
         st.warning(
-            "La demostración RAG no pudo cargarse: "
+            "No se pudo inicializar la recuperación "
+            "documental de demostración: "
             + type(exc).__name__
-        )
-
-        st.caption(
-            "Si es el primer inicio, revisa los registros "
-            "de dependencias y descarga del modelo."
         )
 
 
 # ============================================================
-# 10. CONTROL DE SESIÓN Y MEMORIA CONVERSACIONAL
+# 9. ESTADO BREVE DE DISPONIBILIDAD
+# ============================================================
+
+with st.expander(
+    "Información técnica del prototipo",
+    expanded=False
+):
+
+    st.write(status)
+
+    if demo is not None:
+        st.write(
+            "Recuperación documental de demostración: "
+            "habilitada con ocho fichas educativas "
+            "de contenido técnico."
+        )
+    else:
+        st.write(
+            "Recuperación documental de demostración: "
+            "no disponible."
+        )
+
+    st.write(
+        "La generación abierta mediante Qwen "
+        "permanece deshabilitada."
+    )
+
+
+# ============================================================
+# 10. MEMORIA CONVERSACIONAL
 # ============================================================
 
 if "chat_session" not in st.session_state:
@@ -319,7 +326,10 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
-if st.button("Nueva conversación"):
+if st.button(
+    "Nueva conversación",
+    use_container_width=False
+):
 
     st.session_state.chat_session.reset()
 
@@ -340,13 +350,12 @@ for msg in st.session_state.messages:
 
 
 # ============================================================
-# 12. RECEPCIÓN Y PROCESAMIENTO DE CONSULTAS
+# 12. INTERACCIÓN CON EL ASISTENTE
 # ============================================================
 
 question = st.chat_input(
-    "Escribe tu consulta"
+    "Escribe aquí tu consulta..."
 )
-
 
 if question:
 
@@ -362,44 +371,40 @@ if question:
         st.session_state.chat_session
     )
 
-    # Tratar ambas rutas preventivas como conversaciones sensibles.
-    # El historial visible se limpia y no conserva el relato.
-    emergency = result["route"] in (
+    # Las consultas sensibles no se conservan
+    # en el historial visual de la conversación.
+    sensitive = result["route"] in (
         "SEGURIDAD_INMEDIATA_189",
-        "ORIENTACION_PREVENTIVA_V11",
+        "ORIENTACION_PREVENTIVA_V11"
     )
 
-    # Frente a una urgencia se limpia el historial interno
-    # y también el historial visible de la conversación.
-
-    if emergency:
+    if sensitive:
 
         st.session_state.messages = []
 
-        st.session_state.chat_session.reset()
+        # La limpieza de memoria y el indicador
+        # temporal de seguimiento son gestionados
+        # por backend/chatbot.py.
 
     else:
 
-        st.session_state.messages.append(
-            {
-                "role": "user",
-                "content": question
-            }
-        )
+        st.session_state.messages.append({
+            "role": "user",
+            "content": question
+        })
 
     with st.chat_message("assistant"):
 
         st.markdown(result["answer"])
 
+        # Ruta técnica visible en modo de demostración.
         st.caption(
-            "Ruta: " + result["route"]
+            "Clasificación: " + result["route"]
         )
 
-    if not emergency:
+    if not sensitive:
 
-        st.session_state.messages.append(
-            {
-                "role": "assistant",
-                "content": result["answer"]
-            }
-        )
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": result["answer"]
+        })
