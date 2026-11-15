@@ -84,6 +84,65 @@ def _resultado(ruta, clasificacion, respuesta, regla):
 def evaluate(text):
     """Clasifica primero el riesgo; no ejecuta recuperación ni modelos."""
     normalizado = normalizar_alerta_v11(text)
+    
+    # Detección de expresiones breves de violencia.
+    # Evitar alertas por preguntas conceptuales o negaciones.
+    if normalizado and not CONSULTA_ABSTRACTA.search(normalizado):
+
+        negacion = re.search(
+            r"\b(?:no|ya no|nunca)\s+"
+            r"(?:me pegan|me pega|le pegan|le pega)\b",
+            normalizado
+        )
+
+        if not negacion:
+
+            # Violencia hacia una tercera persona.
+            tercero = re.search(
+                r"\b(?:le pegan|le pega|golpean|agreden|"
+                r"maltratan)\s+a\s+(?:mi|una|la)\s+"
+                r"(?:hermana|madre|mama|hija|amiga|"
+                r"prima|tia|vecina|pareja)\b",
+                normalizado
+            )
+
+            if tercero:
+                if re.search(
+                    r"\b(?:ahora mismo|en este momento|"
+                    r"peligro inmediato)\b",
+                    normalizado
+                ):
+                    return {
+                        "ruta": "SEGURIDAD_INMEDIATA_189",
+                        "respuesta": RESPUESTA_ALERTA_INMEDIATA_V11,
+                        "clasificacion": "posible_urgencia",
+                        "qwen_ejecutado": False,
+                        "rag_ejecutado": False,
+                    }
+
+                return {
+                    "ruta": "ORIENTACION_PREVENTIVA_V11",
+                    "respuesta": None,
+                    "clasificacion": "orientacion_terceros",
+                    "qwen_ejecutado": False,
+                    "rag_ejecutado": False,
+                }
+
+            # Violencia expresada en primera persona.
+            if re.search(
+                r"\b(?:me pegan|me pega|me golpean|"
+                r"me golpea|me agreden|me agrede|"
+                r"me maltratan|me maltrata)\b",
+                normalizado
+            ):
+                return {
+                    "ruta": "SEGURIDAD_INMEDIATA_189",
+                    "respuesta": RESPUESTA_ALERTA_INMEDIATA_V11,
+                    "clasificacion": "posible_urgencia",
+                    "qwen_ejecutado": False,
+                    "rag_ejecutado": False,
+                }
+
     if not normalizado:
         return respuesta_preventiva_v11(text)
 
