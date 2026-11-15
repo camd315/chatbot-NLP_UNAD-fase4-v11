@@ -41,11 +41,38 @@ class DemoRetriever:
         self.col.upsert(ids=[x['id'] for x in self.items],documents=[x['texto'] for x in self.items],
                         metadatas=[{'tema':x['tema'],'titulo':x['titulo'],'origen':'contenido educativo original'} for x in self.items],
                         embeddings=vectors.tolist())
-    def retrieve(self,question,k=2):
-        topic=demo_topic(question)
-        if not topic: return []
-        vec=self.model.encode(['query: '+question],normalize_embeddings=True,show_progress_bar=False)
-        r=self.col.query(query_embeddings=vec.tolist(),n_results=1,
-                         where={'tema':topic},include=['documents','metadatas','distances'])
-        return [{'id':i,'texto':t,'titulo':m['titulo'],'distancia':round(float(d),3)}
-                for i,t,m,d in zip(r['ids'][0],r['documents'][0],r['metadatas'][0],r['distances'][0])]
+    def retrieve(self, question, k=None):
+        topic = demo_topic(question)
+        if not topic:
+            return []
+
+        vec = self.model.encode(
+            ['query: ' + question],
+            normalize_embeddings=True,
+            show_progress_bar=False
+        )
+
+        # Recuperación configurada desde config.py
+        n = SETTINGS.demo_top_k if k is None else k
+
+        r = self.col.query(
+            query_embeddings=vec.tolist(),
+            n_results=n,
+            where={'tema': topic},
+            include=['documents', 'metadatas', 'distances']
+        )
+
+        return [
+            {
+                'id': i,
+                'texto': t,
+                'titulo': m['titulo'],
+                'distancia': round(float(d), 3)
+            }
+            for i, t, m, d in zip(
+                r['ids'][0],
+                r['documents'][0],
+                r['metadatas'][0],
+                r['distances'][0]
+            )
+        ]
