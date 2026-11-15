@@ -62,61 +62,87 @@ _RESPUESTAS = {
 }
 
 
+
 def respuesta_publica(pregunta: str):
     """Devuelve (tema, respuesta) o None, sin acceso a ChromaDB."""
+    q = _normalizar(pregunta)
 
-q = _normalizar(pregunta)
+    # Consultas jurídicas breves y generales.
+    if q in ("ley", "leyes", "normas", "legislacion"):
+        return (
+            "ORIENTACION_JURIDICA_GUIADA",
+            "Puedo orientarte sobre leyes y derechos "
+            "relacionados con las mujeres en Colombia.\n\n"
+            "¿Qué tema deseas conocer?\n\n"
+            "- Protección frente a las violencias.\n"
+            "- Derechos de las mujeres.\n"
+            "- Medidas de protección y rutas institucionales.\n"
+            "- Igualdad y no discriminación.\n\n"
+            "Por ejemplo: **¿Qué establece la Ley 1257 de 2008?**"
+        )
 
-# Consultas jurídicas breves y generales.
-if q in ("ley", "leyes", "normas", "legislacion"):
-    return (
-        "ORIENTACION_JURIDICA_GUIADA",
-        "Puedo orientarte sobre leyes y derechos "
-        "relacionados con las mujeres en Colombia.\n\n"
-        "¿Qué tema deseas conocer?\n\n"
-        "- Protección frente a las violencias.\n"
-        "- Derechos de las mujeres.\n"
-        "- Medidas de protección y rutas institucionales.\n"
-        "- Igualdad y no discriminación.\n\n"
-        "Puedes escribir, por ejemplo: "
-        "**¿Qué establece la Ley 1257 de 2008?**"
-    )
+    # Legislación relacionada con las mujeres.
+    if q in (
+        "leyes para mujer",
+        "leyes para mujeres",
+        "leyes de mujeres",
+        "leyes de la mujer",
+        "leyes que protegen a las mujeres",
+        "derechos de mujer",
+        "derechos para mujeres"
+    ):
+        return "DERECHOS_EDUCATIVOS", _RESPUESTAS["derechos"]
 
-# Expresiones breves sobre legislación para las mujeres.
-if q in (
-    "leyes para mujer",
-    "leyes para mujeres",
-    "leyes de mujeres",
-    "leyes de la mujer",
-    "leyes que protegen a las mujeres",
-    "derechos de mujer",
-    "derechos para mujeres"
-):
-    return (
-        "DERECHOS_EDUCATIVOS",
-        "En Colombia existen normas para proteger "
-        "los derechos de las mujeres.\n\n"
-        "Un ejemplo importante es la **Ley 1257 de 2008**, "
-        "que establece medidas de sensibilización, "
-        "prevención y sanción frente a formas de "
-        "violencia y discriminación contra las mujeres.\n\n"
-        "Puedo explicarte esta ley, los derechos "
-        "que reconoce o las opciones generales "
-        "para buscar orientación institucional.\n\n"
-        "*Información educativa; no sustituye "
-        "la asesoría jurídica.*"
-    )
+    if len(q) < 12:
+        return None
 
-if len(q) < 12:
+    # Derechos de las mujeres y Ley 1257.
+    if "1257" in q or (
+        "derechos" in q and (
+            "mujer" in q or "violencia" in q
+        )
+    ):
+        return "DERECHOS_EDUCATIVOS", _RESPUESTAS["derechos"]
+
+    # Orientación institucional en Cali.
+    if any(t in q for t in (
+        "casa matria",
+        "orientacion institucional",
+        "donde puedo recibir orientacion",
+        "donde puedo pedir ayuda en cali",
+        "a donde acudir en cali"
+    )):
+        return (
+            "ORIENTACION_INSTITUCIONAL_EDUCATIVA",
+            _RESPUESTAS["institucional"]
+        )
+
+    # Autonomía femenina.
+    if any(t in q for t in (
+        "autoestima",
+        "autoconocimiento",
+        "autonomia",
+        "tomar decisiones",
+        "tomar una decision",
+        "limites personales",
+        "confianza en mi misma"
+    )):
+        return "AUTONOMIA_EDUCATIVA", _RESPUESTAS["autonomia"]
+
+    # Prevención de violencias.
+    if any(t in q for t in (
+        "tipos de violencia",
+        "violencia psicologica",
+        "senales de violencia",
+        "violencia contra las mujeres",
+        "violencia economica",
+        "violencia fisica",
+        "violencia de genero"
+    )):
+        return (
+            "PREVENCION_VIOLENCIAS_EDUCATIVA",
+            _RESPUESTAS["violencia"]
+        )
+
     return None
 
-    # Priorizar preguntas jurídicas explícitas frente a coincidencias generales.
-    if '1257' in q or ('derechos' in q and ('mujer' in q or 'violencia' in q)):
-        return 'DERECHOS_EDUCATIVOS', _RESPUESTAS['derechos']
-    if any(t in q for t in ('casa matria', 'orientacion institucional', 'donde puedo recibir orientacion', 'donde puedo pedir ayuda en cali', 'a donde acudir en cali')):
-        return 'ORIENTACION_INSTITUCIONAL_EDUCATIVA', _RESPUESTAS['institucional']
-    if any(t in q for t in ('autoestima', 'autoconocimiento', 'autonomia', 'tomar decisiones', 'tomar una decision', 'limites personales', 'confianza en mi misma')):
-        return 'AUTONOMIA_EDUCATIVA', _RESPUESTAS['autonomia']
-    if any(t in q for t in ('tipos de violencia', 'violencia psicologica', 'senales de violencia', 'violencia contra las mujeres', 'violencia economica', 'violencia fisica', 'violencia de genero')):
-        return 'PREVENCION_VIOLENCIAS_EDUCATIVA', _RESPUESTAS['violencia']
-    return None
