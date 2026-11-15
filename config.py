@@ -9,7 +9,7 @@ class Settings:
     app_title: str = "Asistente académico NLP · Fase 4"
     embedding_model: str = "intfloat/multilingual-e5-small"
     collection_name: str = os.environ.get("CHROMA_COLLECTION_NAME", "")
-    chroma_path: Path = ROOT / "data" / "chroma_db"
+    chroma_path: Path = Path(os.environ.get("CHROMA_DB_PATH", str(ROOT / "data" / "chroma_db")))
     top_k: int = 4
     # Modelo LLM abierto utilizado en el ejercicio 2.
     # Declararlo no habilita su ejecución en Streamlit.
