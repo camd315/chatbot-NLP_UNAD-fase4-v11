@@ -16,6 +16,8 @@ class Settings:
     authorized_corpus: bool = os.environ.get("AUTHORIZED_PUBLIC_CORPUS", "false").lower() == "true"
     # V11 no autoriza publicar borradores Qwen.
     allow_generated_answers: bool = False
+    # Demo pública con textos didácticos propios. RAG V11 original: NO instalado.
+    demo_rag_enabled: bool = os.environ.get("DEMO_RAG_ENABLED", "true").lower() == "true"
     log_events: bool = os.environ.get("LOG_EVENTS", "false").lower() == "true"
 
 SETTINGS = Settings()
