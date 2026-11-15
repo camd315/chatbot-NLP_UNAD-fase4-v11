@@ -204,33 +204,45 @@ st.caption(
 # 6. CARGA DEL CORPUS ESPECIALIZADO V11
 # ============================================================
 
+
 @st.cache_resource(show_spinner=False)
 def load_original():
 
-    if not SETTINGS.authorized_corpus:
-
+    # No exponer automáticamente los documentos
+    # en la aplicación pública.
+    if not st.secrets.get("V11_ENABLED", False):
         return (
             None,
-            "Contenido documental especializado "
+            "Base documental V11 preparada, "
             "pendiente de habilitación."
         )
 
     try:
+        from backend.private_db import preparar_base_privada
 
-        ret = V11Retriever()
+        preparar_base_privada(
+            token=st.secrets["GITHUB_PRIVATE_TOKEN"],
+            repo=st.secrets["GITHUB_PRIVATE_REPO"],
+            branch=st.secrets["GITHUB_PRIVATE_BRANCH"],
+            destino=SETTINGS.chroma_path
+        )
+
+        recuperador = V11Retriever()
 
         return (
-            ret,
-            "Base documental especializada disponible."
+            recuperador,
+            "Base documental V11 cargada correctamente "
+            "(173 fragmentos)."
         )
 
     except Exception as exc:
-
         return (
             None,
-            "La base documental especializada "
-            "no está disponible: " + type(exc).__name__
+            "No se pudo cargar la base documental V11: "
+            + type(exc).__name__
         )
+
+
 
 
 # ============================================================
