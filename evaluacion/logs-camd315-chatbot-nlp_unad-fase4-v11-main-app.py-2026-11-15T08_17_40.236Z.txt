@@ -1,0 +1,354 @@
+
+[     UTC     ] Logs for chatbot-nlp-unad-fase4-v11.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[07:48:26] 🚀 Starting up repository: 'chatbot-nlp_unad-fase4-v11', branch: 'main', main module: 'app.py'
+[07:48:26] 🐙 Cloning repository...
+[07:48:27] 🐙 Cloning into '/mount/src/chatbot-nlp_unad-fase4-v11'...
+
+[07:48:28] 🐙 Cloned repository!
+[07:48:28] 🐙 Pulling code changes from Github...
+[07:48:28] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.11.18 environment at: /home/adminuser/venv
+Resolved 130 packages in 1.77s
+Downloading nvidia-cusparselt-cu13 (162.3MiB)
+Downloading nvidia-cufft (208.1MiB)
+Downloading hf-xet (4.1MiB)
+Downloading aiohttp (1.8MiB)
+Downloading pandas (11.8MiB)
+Downloading nvidia-cuda-nvrtc (44.8MiB)
+Downloading nvidia-nccl-cu13 (206.0MiB)
+Downloading nvidia-cudnn-cu13 (495.1MiB)
+Downloading pyarrow (52.5MiB)
+Downloading nvidia-nvshmem-cu13 (129.1MiB)
+Downloading nvidia-cufile (1.3MiB)
+Downloading numpy (16.1MiB)
+Downloading nvidia-cusolver (217.4MiB)
+Downloading scikit-learn (8.9MiB)
+Downloading nvidia-cuda-cccl (3.9MiB)
+Downloading triton (272.5MiB)
+Downloading streamlit (10.7MiB)
+Downloading pygments (1.2MiB)
+Downloading onnxruntime (26.5MiB)
+Downloading nvidia-nvjitlink (44.5MiB)
+Downloading scipy (33.7MiB)
+Downloading nvidia-cublas (386.1MiB)
+Downloading uvloop (3.8MiB)
+Downloading torch (514.2MiB)
+Downloading nvidia-cusparse (144.0MiB)
+Downloading chromadb (22.2MiB)
+Downloading kubernetes (7.2MiB)
+Downloading pillow (6.8MiB)
+Downloading grpcio (7.0MiB)
+Downloading pydeck (10.9MiB)
+Downloading nvidia-cuda-cupti (11.4MiB)
+Downloading transformers (12.7MiB)
+Downloading cuda-bindings (8.0MiB)
+Downloading tokenizers (3.2MiB)
+Downloading nvidia-cuda-runtime (2.2MiB)
+Downloading pydantic-core (2.1MiB)
+Downloading sympy (6.0MiB)
+Downloading networkx (2.0MiB)
+ Downloaded pygments
+ Downloaded nvidia-cufile
+ Downloaded aiohttp
+ Downloaded networkx
+ Downloaded pydantic-core
+ Downloaded nvidia-cuda-runtime
+ Downloaded tokenizers
+ Downloaded uvloop
+ Downloaded hf-xet
+ Downloaded nvidia-cuda-cccl
+ Downloaded sympy
+ Downloaded pillow
+ Downloaded grpcio
+ Downloaded kubernetes
+ Downloaded cuda-bindings
+ Downloaded scikit-learn
+ Downloaded streamlit
+ Downloaded pydeck
+ Downloaded nvidia-cuda-cupti
+ Downloaded pandas
+ Downloaded transformers
+ Downloaded numpy
+ Downloaded chromadb
+ [2026-11-15 07:48:46.274273] Downloaded onnxruntime
+ Downloaded scipy
+ Downloaded nvidia-nvjitlink
+ Downloaded nvidia-cuda-nvrtc
+ [2026-11-15 07:48:51.352860] Downloaded pyarrow
+ Downloaded nvidia-nvshmem-cu13
+ Downloaded nvidia-cusparse
+ Downloaded nvidia-cusparselt-cu13
+ Downloaded nvidia-nccl-cu13
+ Downloaded nvidia-cufft
+ [2026-11-15 07:49:19.673515] Downloaded nvidia-cusolver
+ Downloaded triton
+ Downloaded nvidia-cublas
+ Downloaded nvidia-cudnn-cu13
+ Downloaded torch
+Prepared 128 packages in 1m 05s
+Installed 128 packages in 2.05s
+ + aiohappyeyeballs==2.7.1
+ + aiohttp==3.14.5
+ + aiohttp-retry==2.9.1
+ + aiosignal==1.4.0
+ + altair==6.3.0
+ + annotated-doc==0.0.6
+ + annotated-types==0.8.0
+ + anyio==4.16.0
+ + attrs==26.1.0
+ + bcrypt==5.0.0
+ + build==1.6.1
+ + charset-normalizer==3.5.2
+ + chromadb==1.5.9
+ + click==8.5.1
+ + cloudpickle==3.1.2
+ + cuda-bindings==13.5.0
+ + cuda-pathfinder==1.9.0
+ + cuda-toolkit==13.2.2
+ + durationpy==0.11
+ + filelock==4.2.10
+ + flatbuffers==25.12.19
+ + frozenlist==1.8.0
+ + fsspec==2026.9.0
+ + googleapis-common-protos==1.76.0
+ + grpcio==1.85.1
+ + h11==0.16.0
+ + hf-xet==1.8.0
+ + httpcore==1.0.9
+ + httpcore2==2.16.0
+ + httptools==0.9.0
+ + httpx==0.28.1
+ + httpx2==2.16.0
+ + huggingface-hub==2.4.0
+ + idna==3.20
+ + importlib-resources==7.1.0
+ + itsdangerous==2.2.0
+ + jinja2==3.1.6
+ + joblib==1.6.0
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + kubernetes==37.0.2
+ + markdown-it-py==4.3.0
+ + markupsafe==3.0.4
+ + mdurl==0.1.2
+ + mmh3==5.3.1
+ + mpmath==1.3.0
+ + multidict==7.2.1
+ + narwhals==2.28.0
+ + networkx==3.6.1
+ + numpy==2.4.6
+ + nvidia-cublas==13.4.1.3
+ + nvidia-cuda-cccl==13.3.5.0.6
+ + nvidia-cuda-cupti==13.2.86
+ + nvidia-cuda-nvrtc==13.2.86
+ + nvidia-cuda-runtime==13.2.86
+ + nvidia-cudnn-cu13[2026-11-15 07:49:38.981978] ==9.26.0.51
+ + nvidia-cufft==12.2.0.[2026-11-15 07:49:38.997469] 57
+ + nvidia-cufile==1.17.1.22
+ + nvidia-cusolver==12.2.0.11
+ + nvidia-cusparse==12.7.10.12
+ + nvidia-cusparselt-cu13==0.8.1
+ + nvidia-nccl-cu13==2.30.7
+ + nvidia-nvjitlink==13.5.37
+ + nvidia-nvshmem-cu13==3.7.2
+ + nvidia-nvtx==13.2.86
+ + oauthlib==4.0.1
+ + onnxruntime==1.32.0
+ + opentelemetry-api==1.45.2
+ + opentelemetry-exporter-otlp-common==0.66b2
+ + opentelemetry-exporter-otlp-proto-common==1.45.2
+ + opentelemetry-exporter-otlp-proto-grpc==1.45.2
+ + opentelemetry-proto==1.45.2
+ + opentelemetry-sdk==1.45.2
+ + opentelemetry-semantic-conventions==0.66b2
+ + orjson==3.13.0
+ + overrides==7.7.0
+ + packaging==26.3
+ + pandas==3.1.1
+ + pillow==13.0.0
+ + propcache==0.5.4
+ + protobuf==7.36.2
+ + pyarrow==26.0.1
+ + pybase64==1.5.2
+ + pydantic==2.14.3
+ + pydantic-core==2.50.4
+ + pydantic-settings==2.16.3
+ + pydeck==0.9.3
+ + pygments==2.21.0
+ + pypika==0.51.1
+ + pyproject-hooks==1.3.3
+ + python-dateutil==4.0.0
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.33
+ + pyyaml==6.0.3
+ + referencing==0.37.0
+ + regex==2026.11.9
+ + requests==2.34.2
+ + requests-oauthlib==2.0.0
+ + rich==15.0.0
+ + rpds-py==2026.9.1
+ + safetensors==0.8.0
+ + scikit-learn==1.9.1
+ + scipy==1.17.1
+ + sentence-transformers==5.7.0
+ + shellingham==1.5.4
+ + starlette==1.10.0
+ + streamlit==1.67.0
+ + sympy==1.14.0
+ + tenacity==9.2.1
+ + threadpoolctl==3.8.0
+ + tokenizers==0.23.3
+ + torch==2.15.0
+ + tqdm==4.70.1
+ + transformers==5.23.0
+ + triton==3.9.0
+ + truststore==0.10.5
+ + typer==0.29.1
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.5
+ + tzdata==2026.6
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchdog==7.1.0
+ + watchfiles==1.3.0
+ + websocket-client==1.9.2
+ + websockets==17.4
+ + yarl==1.25.1
+Collecting certifi>=2026.10.19
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+Installing collected packages: certifi
+  Attempting uninstall: certifi
+    Found existing installation: certifi 2026.10.23
+    Uninstalling certifi-2026.10.23:
+      Successfully uninstalled certifi-2026.10.23
+Successfully installed certifi-2026.10.23
+Collecting pip>=26.2.2
+  Downloading pip-26.3-py3-none-any.whl.metadata (4.6 kB)
+Downloading pip-26.3-py3-none-any.whl (2.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 22.9 MB/s  0:00:00[2026-11-15 07:49:43.214392] 
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 26.2.2
+    Uninstalling pip-26.2.2:
+      Successfully uninstalled pip-26.2.2
+Successfully installed pip-26.3
+Checking if Streamlit is installed
+Found Streamlit version 1.67.0 in the environment
+Detected pyarrow 26.0.1 (known segfault, apache/arrow#50471). Replacing with pyarrow<25.
+Using uv pip install.
+Using Python 3.11.18 environment at: /home/adminuser/venv
+Resolved 1 package in 227ms
+Downloading pyarrow (46.6MiB)
+ Downloaded pyarrow
+Prepared 1 package in 1.89s
+Uninstalled 1 package in 83ms
+Installed [2026-11-15 07:49:55.763584] 1 package in 231ms
+ - pyarrow==26.0.1
+ + pyarrow==24.0.0
+Installing rich for an improved exception logging
+Using uv pip install.
+Using Python 3.11.18 environment at: /home/adminuser/venv
+Checked 1 package in 39ms
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+[07:49:58] 🐍 Python dependencies were installed from /mount/src/chatbot-nlp_unad-fase4-v11/requirements.txt using uv.
+Check if streamlit is installed
+Streamlit is already installed
+Collecting certifi>=2026.10.19
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+Installing collected packages: certifi
+  Attempting uninstall: certifi
+    Found existing installation: certifi 2026.10.23
+    Uninstalling certifi-2026.10.23:
+      Successfully uninstalled certifi-2026.10.23
+Successfully installed certifi-2026.10.23
+Collecting pip>=26.2.2
+  Downloading pip-26.3-py3-none-any.whl.metadata (4.6 kB)
+Downloading pip-26.3-py3-none-any.whl (2.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 38.0 MB/s  0:00:00[2026-11-15 07:50:02.850837] 
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 26.3
+    Uninstalling pip-26.3:
+      Successfully uninstalled pip-26.3
+Successfully installed pip-26.3
+[07:50:07] 📦 Processed dependencies!
+2026-11-15 07:50:11.024 Uvicorn server started on :::8501
+
+
+
+V11_FLOW: INICIO PRUEBA PRIVADA
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s][2026-11-15 07:51:06.482311] Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8545.52it/s]
+/mount/src/chatbot-nlp_unad-fase4-v11/backend/rag.py:16: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  if self.model.get_sentence_embedding_dimension() != 384:
+V11_FLOW: FRAGMENTOS=173
+V11_FLOW: LEY_1257 | RUTA=RAG_V11_PRIVADO_EXTRACTIVO | RESPUESTA=SI | QWEN=False | ESTADO=OK
+V11_FLOW: TIPOS_VIOLENCIA | RUTA=RAG_V11_PRIVADO_EXTRACTIVO | RESPUESTA=SI | QWEN=False | ESTADO=OK
+V11_FLOW: ORIENTACION_CALI | RUTA=RAG_V11_PRIVADO_EXTRACTIVO | RESPUESTA=SI | QWEN=False | ESTADO=OK
+V11_FLOW: VALIDACION FUNCIONAL EXITOSA
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s][2026-11-15 07:51:31.106113] Loading weights: 100%|██████████| 199/199 [00:00<00:00, 4701.10it/s]
+/mount/src/chatbot-nlp_unad-fase4-v11/backend/demo_rag.py:35: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  if self.model.get_sentence_embedding_dimension()!=384:
+[07:58:33] 🐙 Pulling code changes from Github...
+[07:58:34] 📦 Processing dependencies...
+[07:58:34] 📦 Processed dependencies!
+[07:58:36] 🔄 Updated app!
+[08:00:25] 🐙 Pulling code changes from Github...
+[08:00:26] 📦 Processing dependencies...
+[08:00:26] 📦 Processed dependencies!
+[08:00:28] 🔄 Updated app!
+[08:03:30] 🐙 Pulling code changes from Github...
+[08:03:31] 📦 Processing dependencies...
+[08:03:31] 📦 Processed dependencies!
+[08:03:34] 🔄 Updated app!
+[08:06:47] 🐙 Pulling code changes from Github...
+[08:06:47] 📦 Processing dependencies...
+[08:06:47] 📦 Processed dependencies!
+[08:06:49] 🔄 Updated app!
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.11/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:136 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.11/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:936 in code_to_exec                                     
+                                                                                
+  /mount/src/chatbot-nlp_unad-fase4-v11/app.py:637 in <module>                  
+                                                                                
+    634 │   with st.chat_message("user"):                                       
+    635 │   │   st.markdown(question)                                           
+    636 │                                                                       
+  ❱ 637 │   result = Chatbot(original, demo).reply(                             
+    638 │   │   question,                                                       
+    639 │   │   st.session_state.chat_session                                   
+    640 │   )                                                                   
+                                                                                
+  /mount/src/chatbot-nlp_unad-fase4-v11/backend/chatbot.py:116 in reply         
+                                                                                
+    113 │   │                                                                   
+    114 │   │   # Contenido educativo público original, independiente de Chrom  
+    115 │   │   # Se evalúa únicamente después de los controles de seguridad.   
+  ❱ 116 │   │   from .public_education import respuesta_publica                 
+    117 │   │   contenido_publico = respuesta_publica(text) if self.retriever   
+    118 │   │   if contenido_publico is not None:                               
+    119 │   │   │   tema, respuesta = contenido_publico                         
+────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────
+   /mount/src/chatbot-nlp_unad-fase4-v11/backend/public_education.py:72         
+      return (                                                                  
+      ▲                                                                         
+────────────────────────────────────────────────────────────────────────────────
+SyntaxError: 'return' outside function
+[08:08:52] 🐙 Pulling code changes from Github...
+[08:08:53] 📦 Processing dependencies...
+[08:08:53] 📦 Processed dependencies!
+[08:08:54] 🔄 Updated app!
