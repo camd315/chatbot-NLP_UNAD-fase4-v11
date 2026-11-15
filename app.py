@@ -135,6 +135,159 @@ if st.secrets.get("V11_DIAGNOSTIC_ENABLED", False):
 # FIN DEL DIAGNOSTICO PRIVADO
 # ============================================================
 
+# ===================
+
+
+# ============================================================
+# PRUEBA PRIVADA TEMPORAL DEL FLUJO COMPLETO V11
+# No muestra documentos ni respuestas en la interfaz.
+# ============================================================
+
+if st.secrets.get("V11_PRIVATE_FLOW_TEST", False):
+
+    @st.cache_resource(show_spinner=False)
+    def probar_flujo_completo_v11():
+        try:
+            from backend.private_db import preparar_base_privada
+            from backend.rag import V11Retriever
+            from backend.chatbot import Chatbot, Session
+
+            print(
+                "V11_FLOW: INICIO PRUEBA PRIVADA",
+                flush=True
+            )
+
+            # 1. Preparar base privada.
+            ruta = preparar_base_privada(
+                token=st.secrets["GITHUB_PRIVATE_TOKEN"],
+                repo=st.secrets["GITHUB_PRIVATE_REPO"],
+                branch=st.secrets["GITHUB_PRIVATE_BRANCH"],
+                destino=SETTINGS.chroma_path
+            )
+
+            # 2. Inicializar recuperador real.
+            recuperador = V11Retriever(db_path=ruta)
+
+            cantidad = recuperador.collection.count()
+
+            print(
+                f"V11_FLOW: FRAGMENTOS={cantidad}",
+                flush=True
+            )
+
+            if cantidad != 173:
+                raise RuntimeError(
+                    "Cantidad documental inesperada"
+                )
+
+            # 3. Instanciar chatbot sin demo técnica.
+            asistente = Chatbot(
+                retriever=recuperador,
+                demo_retriever=None
+            )
+
+            preguntas = [
+                (
+                    "LEY_1257",
+                    "¿Qué derechos reconoce la Ley 1257 "
+                    "de 2008 a las mujeres?"
+                ),
+                (
+                    "TIPOS_VIOLENCIA",
+                    "¿Qué tipos de violencia contra "
+                    "las mujeres existen?"
+                ),
+                (
+                    "ORIENTACION_CALI",
+                    "¿Dónde puedo recibir orientación "
+                    "institucional en Cali?"
+                )
+            ]
+
+            fallos = 0
+
+            # 4. Ejecutar flujo Chatbot -> RAG.
+            for nombre, pregunta in preguntas:
+
+                # Sesión independiente por consulta.
+                sesion = Session()
+
+                resultado = asistente.reply(
+                    pregunta,
+                    sesion
+                )
+
+                ruta_respuesta = resultado.get(
+                    "route", "SIN_RUTA"
+                )
+
+                respuesta = resultado.get(
+                    "answer", ""
+                )
+
+                qwen = resultado.get(
+                    "qwen_executed", False
+                )
+
+                # Solo metadatos, nunca texto documental.
+                respuesta_disponible = bool(
+                    str(respuesta).strip()
+                )
+
+                rutas_validas = {
+                    "RAG_V11_PRIVADO_EXTRACTIVO",
+                    "DOCUMENTAL_CONTROLADA",
+                    "DOCUMENTAL_JURIDICA"
+                }
+
+                correcto = (
+                    ruta_respuesta in rutas_validas
+                    and respuesta_disponible
+                    and qwen is False
+                )
+
+                if not correcto:
+                    fallos += 1
+
+                print(
+                    "V11_FLOW: "
+                    f"{nombre} | "
+                    f"RUTA={ruta_respuesta} | "
+                    f"RESPUESTA={'SI' if respuesta_disponible else 'NO'} | "
+                    f"QWEN={qwen} | "
+                    f"ESTADO={'OK' if correcto else 'REVISAR'}",
+                    flush=True
+                )
+
+            if fallos == 0:
+                print(
+                    "V11_FLOW: VALIDACION FUNCIONAL EXITOSA",
+                    flush=True
+                )
+            else:
+                print(
+                    f"V11_FLOW: PRUEBAS_PENDIENTES={fallos}",
+                    flush=True
+                )
+
+            # No devolver respuestas ni fragmentos.
+            return fallos == 0
+
+        except Exception as exc:
+            print(
+                "V11_FLOW: ERROR="
+                + type(exc).__name__,
+                flush=True
+            )
+            return False
+
+    probar_flujo_completo_v11()
+
+# ============================================================
+# FIN DE PRUEBA PRIVADA TEMPORAL
+# ============================================================
+
+
 
 # ============================================================
 # 2. PRESENTACIÓN PRINCIPAL
