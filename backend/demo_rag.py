@@ -10,7 +10,7 @@ TEMAS = {
  "chunk": ("chunk", "fragmentacion", "segmentacion documental"),
  "memoria": ("memoria", "contexto conversacional", "historial"),
  "seguridad": ("seguridad", "abstencion", "alucinacion"),
- "evaluacion": ("evaluacion", "pruebas", "metricas"),
+ "evaluacion": ("evaluacion", "evalua", "evaluar", "evaluado", "pruebas", "metricas"),
  "streamlit": ("streamlit", "despliegue", "interfaz"),
 }
 
