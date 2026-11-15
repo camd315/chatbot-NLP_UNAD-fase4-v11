@@ -1,4 +1,3 @@
-
 """Interfaz Streamlit – UNAD NLP Fase 4.
 
 Prototipo académico de autonomía femenina,
@@ -14,7 +13,6 @@ from config import SETTINGS
 from backend.chatbot import Chatbot, Session
 from backend.rag import V11Retriever
 
-
 # ============================================================
 # 1. CONFIGURACIÓN GENERAL
 # ============================================================
@@ -24,7 +22,6 @@ st.set_page_config(
     page_icon="💜",
     layout="centered"
 )
-
 
 # ============================================================
 # 2. PRESENTACIÓN PRINCIPAL
@@ -46,7 +43,6 @@ st.markdown("""
 Este espacio ha sido diseñado como un prototipo académico
 de inteligencia artificial para facilitar el acceso
 a información educativa y preventiva.
-
 Su propósito es contribuir al fortalecimiento de la
 **autonomía femenina**, la **prevención de violencias
 de género** y el conocimiento de los **derechos y
@@ -57,7 +53,6 @@ y a personas interesadas en estos temas desde una
 perspectiva educativa y comunitaria.
 """)
 
-
 # ============================================================
 # 3. ALCANCE DEL PROYECTO: TRES EJES TEMÁTICOS
 # ============================================================
@@ -65,9 +60,7 @@ perspectiva educativa y comunitaria.
 st.markdown("### Nuestros ejes de orientación")
 
 with st.container(border=True):
-
     st.markdown("#### 🌷 Autonomía femenina")
-
     st.write(
         "Promover conocimientos relacionados con "
         "el autoconocimiento, la autoestima, "
@@ -76,9 +69,7 @@ with st.container(border=True):
     )
 
 with st.container(border=True):
-
     st.markdown("#### 🛡️ Prevención de violencias")
-
     st.write(
         "Facilitar información educativa para comprender "
         "los conceptos, manifestaciones y señales generales "
@@ -87,9 +78,7 @@ with st.container(border=True):
     )
 
 with st.container(border=True):
-
     st.markdown("#### 🏛️ Orientación institucional")
-
     st.write(
         "Facilitar el conocimiento de derechos, "
         "entidades, servicios y rutas oficiales "
@@ -97,16 +86,11 @@ with st.container(border=True):
         "mediante información pública verificable."
     )
 
-
 # ============================================================
 # 4. INSTRUCCIONES DE USO
 # ============================================================
 
-with st.expander(
-    "¿Cómo utilizar el asistente?",
-    expanded=False
-):
-
+with st.expander("¿Cómo utilizar el asistente?", expanded=False):
     st.markdown("""
     Puedes escribir tu consulta en el cuadro
     de conversación ubicado en la parte inferior.
@@ -114,7 +98,6 @@ with st.expander(
     El asistente procesará tu mensaje y ofrecerá
     información según las funcionalidades
     y fuentes que estén disponibles.
-
     Cuando una respuesta esté respaldada por una
     fuente documental, se mostrará su referencia.
 
@@ -131,16 +114,11 @@ with st.expander(
     para reiniciar la interacción.
     """)
 
-
 # ============================================================
 # 5. ALCANCE Y LIMITACIONES DE LA VERSIÓN ACTUAL
 # ============================================================
 
-with st.expander(
-    "Alcance y limitaciones de esta versión",
-    expanded=False
-):
-
+with st.expander("Alcance y limitaciones de esta versión", expanded=False):
     st.markdown("""
     **Objetivo del proyecto**
 
@@ -149,12 +127,10 @@ with st.expander(
     violencias y orientación institucional.
 
     **Estado actual**
-
     Esta versión pública se encuentra en etapa
     de demostración y validación tecnológica.
 
     Actualmente permite:
-
     - Utilizar una interfaz conversacional.
     - Probar la recuperación documental mediante
       un conjunto limitado de fichas educativas
@@ -167,7 +143,6 @@ with st.expander(
       de algunas interacciones.
 
     **Funcionalidades aún no habilitadas**
-
     - Recuperación completa del corpus especializado
       sobre los tres ejes del proyecto.
     - Generación abierta mediante Qwen.
@@ -179,7 +154,6 @@ with st.expander(
     educativo especializado del proyecto.
 
     **Límites de atención**
-
     El sistema no realiza diagnósticos psicológicos,
     asesoría jurídica personalizada, clasificación
     individual del riesgo, denuncias automáticas
@@ -192,29 +166,33 @@ with st.expander(
     oficiales cuando corresponda.
     """)
 
-
 st.caption(
     "Este asistente es un prototipo académico en evaluación. "
     "No sustituye la atención profesional, la orientación "
     "jurídica personalizada ni los servicios de emergencia."
 )
 
-
 # ============================================================
-# 6. CARGA DEL CORPUS ESPECIALIZADO V11
+# 6. CARGA DEL CORPUS ESPECIALIZADO V11 (PRIVADO)
 # ============================================================
-
 
 @st.cache_resource(show_spinner=False)
 def load_original():
-
-    # No exponer automáticamente los documentos
-    # en la aplicación pública.
+    # Deshabilitado por defecto para evitar exponer los
+    # documentos privados en el chatbot público.
     if not st.secrets.get("V11_ENABLED", False):
         return (
             None,
             "Base documental V11 preparada, "
             "pendiente de habilitación."
+        )
+
+    # Se mantiene además la autorización original del proyecto.
+    if not SETTINGS.authorized_corpus:
+        return (
+            None,
+            "Corpus especializado pendiente de autorización "
+            "para uso público."
         )
 
     try:
@@ -228,11 +206,10 @@ def load_original():
         )
 
         recuperador = V11Retriever()
-
         return (
             recuperador,
             "Base documental V11 cargada correctamente "
-            "(173 fragmentos)."
+            "(verificación de fragmentos a cargo del recuperador)."
         )
 
     except Exception as exc:
@@ -242,70 +219,46 @@ def load_original():
             + type(exc).__name__
         )
 
-
-
-
 # ============================================================
 # 7. CARGA DE LA DEMOSTRACIÓN RAG
 # ============================================================
 
 @st.cache_resource(show_spinner=False)
 def load_demo():
-
     if not SETTINGS.demo_rag_enabled:
-
-        return (
-            None,
-            "Demostración documental deshabilitada."
-        )
+        return (None, "Demostración documental deshabilitada.")
 
     from backend.demo_rag import DemoRetriever
-
     return (
         DemoRetriever(),
         "Componente de recuperación documental "
         "de demostración disponible."
     )
 
-
 # ============================================================
 # 8. INICIALIZACIÓN DE COMPONENTES
 # ============================================================
 
 original, status = load_original()
-
 demo = None
 
 if SETTINGS.demo_rag_enabled:
-
     try:
-
-        with st.spinner(
-            "Preparando el asistente..."
-        ):
-
+        with st.spinner("Preparando el asistente..."):
             demo, demo_status = load_demo()
-
     except Exception as exc:
-
         st.warning(
             "No se pudo inicializar la recuperación "
             "documental de demostración: "
             + type(exc).__name__
         )
 
-
 # ============================================================
 # 9. ESTADO BREVE DE DISPONIBILIDAD
 # ============================================================
 
-with st.expander(
-    "Información técnica del prototipo",
-    expanded=False
-):
-
+with st.expander("Información técnica del prototipo", expanded=False):
     st.write(status)
-
     if demo is not None:
         st.write(
             "Recuperación documental de demostración: "
@@ -323,62 +276,40 @@ with st.expander(
         "permanece deshabilitada."
     )
 
-
 # ============================================================
 # 10. MEMORIA CONVERSACIONAL
 # ============================================================
 
 if "chat_session" not in st.session_state:
-
     st.session_state.chat_session = Session()
 
-
 if "messages" not in st.session_state:
-
     st.session_state.messages = []
 
-
-if st.button(
-    "Nueva conversación",
-    use_container_width=False
-):
-
+if st.button("Nueva conversación", use_container_width=False):
     st.session_state.chat_session.reset()
-
     st.session_state.messages = []
-
     st.rerun()
-
 
 # ============================================================
 # 11. VISUALIZACIÓN DEL HISTORIAL
 # ============================================================
 
 for msg in st.session_state.messages:
-
     with st.chat_message(msg["role"]):
-
         st.markdown(msg["content"])
-
 
 # ============================================================
 # 12. INTERACCIÓN CON EL ASISTENTE
 # ============================================================
 
-question = st.chat_input(
-    "Escribe aquí tu consulta..."
-)
+question = st.chat_input("Escribe aquí tu consulta...")
 
 if question:
-
     with st.chat_message("user"):
-
         st.markdown(question)
 
-    result = Chatbot(
-        original,
-        demo
-    ).reply(
+    result = Chatbot(original, demo).reply(
         question,
         st.session_state.chat_session
     )
@@ -391,31 +322,22 @@ if question:
     )
 
     if sensitive:
-
         st.session_state.messages = []
-
         # La limpieza de memoria y el indicador
         # temporal de seguimiento son gestionados
         # por backend/chatbot.py.
-
     else:
-
         st.session_state.messages.append({
             "role": "user",
             "content": question
         })
 
     with st.chat_message("assistant"):
-
         st.markdown(result["answer"])
-
         # Ruta técnica visible en modo de demostración.
-        st.caption(
-            "Clasificación: " + result["route"]
-        )
+        st.caption("Clasificación: " + result["route"])
 
     if not sensitive:
-
         st.session_state.messages.append({
             "role": "assistant",
             "content": result["answer"]
