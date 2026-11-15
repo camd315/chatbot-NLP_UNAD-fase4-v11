@@ -1,0 +1,50 @@
+[
+  {
+    "id": "intro-rag",
+    "titulo": "Recuperación aumentada",
+    "tema": "rag",
+    "texto": "RAG (retrieval-augmented generation) es una arquitectura que primero busca fragmentos pertinentes en una base documental y luego proporciona ese contexto a un componente de respuesta. Recuperar documentos no garantiza por sí mismo respuestas correctas; es necesario revisar las fuentes."
+  },
+  {
+    "id": "embeddings",
+    "titulo": "Representaciones semánticas",
+    "tema": "embedding",
+    "texto": "Un embedding es una representación numérica de un texto que permite comparar su similitud semántica con una consulta. En el ejercicio académico se utilizó el modelo abierto intfloat/multilingual-e5-small con vectores de 384 dimensiones."
+  },
+  {
+    "id": "chroma",
+    "titulo": "Almacenamiento vectorial",
+    "tema": "chroma",
+    "texto": "ChromaDB es una base vectorial que almacena textos, identificadores, metadatos y embeddings, y permite recuperar fragmentos relevantes mediante consultas vectoriales. La base V11 original tiene una colección y 173 fragmentos, pero no está incorporada a esta demostración pública."
+  },
+  {
+    "id": "segmentacion",
+    "titulo": "Preparación de documentos",
+    "tema": "chunk",
+    "texto": "En una canalización RAG, los documentos se extraen, limpian y dividen en fragmentos o chunks. Cada fragmento conserva metadatos como identificador y fuente para poder explicar de dónde procede una respuesta."
+  },
+  {
+    "id": "memoria",
+    "titulo": "Memoria conversacional",
+    "tema": "memoria",
+    "texto": "La memoria de corto plazo permite mantener información limitada de la sesión. Por privacidad, el prototipo V11 guarda metadatos temáticos y reinicia el contexto interno al detectar una urgencia; el historial visible puede administrarse por separado."
+  },
+  {
+    "id": "seguridad",
+    "titulo": "Seguridad y abstención",
+    "tema": "seguridad",
+    "texto": "Los controles preventivos se ejecutan antes de recuperar documentos. Cuando no existe evidencia suficiente, el prototipo responde con una abstención documental, sin inventar información ni publicar libremente respuestas del modelo generativo."
+  },
+  {
+    "id": "evaluacion",
+    "titulo": "Evaluación del prototipo",
+    "tema": "evaluacion",
+    "texto": "La evaluación de un chatbot RAG incluye preguntas representativas, revisión de claridad y pertinencia, evidencia de fuentes, detección de respuestas incorrectas y un plan documentado de mejoras. La guía académica solicita al menos diez casos de prueba."
+  },
+  {
+    "id": "streamlit",
+    "titulo": "Interfaz y despliegue",
+    "tema": "streamlit",
+    "texto": "Streamlit permite implementar interfaces web interactivas en Python. La aplicación académica usa mensajes de chat, historial de sesión y configuración centralizada, y se publica desde un repositorio GitHub en Streamlit Community Cloud."
+  }
+]
