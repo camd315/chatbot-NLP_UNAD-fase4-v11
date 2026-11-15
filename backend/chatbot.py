@@ -111,6 +111,20 @@ class Chatbot:
                 "memory": 0,
             }
 
+        # Contenido educativo público original, independiente de ChromaDB privado.
+        # Se evalúa únicamente después de los controles de seguridad.
+        from .public_education import respuesta_publica
+        contenido_publico = respuesta_publica(text) if self.retriever is None else None
+        if contenido_publico is not None:
+            tema, respuesta = contenido_publico
+            session.history.append({"topic": tema})
+            return {
+                "route": tema,
+                "answer": respuesta,
+                "qwen_executed": False,
+                "memory": len(session.history),
+            }
+
         # El componente de comparación semántica V11 depende de 32
         # referencias V10 NO incluidas. No se habilita generación automática.
         route = exact_route(text)
