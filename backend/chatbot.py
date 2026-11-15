@@ -11,7 +11,9 @@ class Session:
     def reset(self): self.history.clear()
 
 class Chatbot:
-    def __init__(self,retriever=None): self.retriever=retriever
+    def __init__(self,retriever=None, demo_retriever=None):
+        self.retriever=retriever
+        self.demo_retriever=demo_retriever
     def reply(self,text,session:Session):
         if not isinstance(text,str) or not text.strip():
             return {"route":"ENTRADA_INVALIDA","answer":"Por favor, escribe una consulta.","qwen_executed":False}
@@ -22,6 +24,20 @@ class Chatbot:
         # El componente de comparación semántica V11 depende de 32 referencias V10 NO incluidas.
         # Esta adaptación falla de modo conservador: no abre la generación automática.
         route=exact_route(text)
+        # Demostración independiente del corpus V11: respuestas EXTRACTIVAS originales.
+        if self.demo_retriever is not None and not route:
+            from .demo_rag import demo_topic
+            if demo_topic(text):
+                try:
+                    found=self.demo_retriever.retrieve(text,k=2)
+                except Exception:
+                    found=[]
+                if found:
+                    content='\n\n'.join(f"**{f['titulo']}** — {f['texto']}\n\nFuente: ficha educativa original `{f['id']}`." for f in found)
+                    session.history.append({'topic':'demo'})
+                    return {'route':'RAG_DEMO_EXTRACTIVO','answer':content,'qwen_executed':False,
+                            'memory':len(session.history),'sources':[f['id'] for f in found]}
+        
         if not route or not self.retriever:
             return {"route":"DOCUMENTACION_PENDIENTE","answer":ABSTAIN,"qwen_executed":False,
                     "memory":len(session.history)}
