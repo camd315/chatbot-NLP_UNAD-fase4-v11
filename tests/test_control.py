@@ -68,11 +68,11 @@ class ControlTests(unittest.TestCase):
     
         self.assertEqual(len(self.session.history), 1)
     
-        response = self.bot.respond(
+        response = self.bot.reply(
             'Mi hermana está siendo golpeada y necesita ayuda urgente.',
             self.session
         )
-    
+            
         self.assertEqual(
             response['route'],
             'SEGURIDAD_INMEDIATA_189'
