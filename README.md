@@ -26,3 +26,24 @@ La descarga inicial del modelo E5 depende de acceso de red y recursos disponible
 ## Privacidad
 No registrar ni subir preguntas de personas reales. No publicar datos, claves, archivos
 originales, el ZIP del ejercicio 2 ni la base de 173 fragmentos sin autorización verificable.
+
+## Configuración centralizada
+
+El prototipo centraliza sus parámetros operativos en `config.py`, mediante la clase `Settings` y la instancia `SETTINGS`.
+
+| Parámetro | Valor predeterminado | Función |
+|---|---|---|
+| `llm_model` | `Qwen/Qwen2.5-1.5B-Instruct` | Identifica el LLM del ejercicio 2; no se ejecuta en la demostración pública. |
+| `llm_temperature` | `0.2` | Temperatura propuesta para futuras pruebas generativas. |
+| `llm_max_new_tokens` | `256` | Límite propuesto de tokens generados. |
+| `embedding_model` | `intfloat/multilingual-e5-small` | Modelo para representaciones semánticas. |
+| `top_k` | `4` | Parámetro de recuperación para el backend original. |
+| `demo_collection_name` | `demo_academica_original_v1` | Nombre de la colección del RAG educativo. |
+| `demo_top_k` | `1` | Número predeterminado de fichas recuperadas. |
+| `memory_limit` | `4` | Límite de contexto conversacional. |
+| `authorized_corpus` | `False` | Impide utilizar el corpus original sin autorización. |
+| `allow_generated_answers` | `False` | Mantiene deshabilitada la generación abierta en Streamlit. |
+
+Los valores de configuración del LLM no implican que la generación esté activa. El sistema público usa recuperación extractiva sobre fichas educativas originales. Los parámetros generativos propuestos deben contrastarse con el notebook del ejercicio 2 antes de presentarse como valores experimentales.
+
+Los parámetros configurables mediante variables de entorno se gestionan sin incluir credenciales ni información sensible en GitHub.
