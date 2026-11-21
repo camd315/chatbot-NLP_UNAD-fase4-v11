@@ -1,0 +1,6 @@
+# Chatbot Prevencion V12 - dependencias directas
+# Instalacion independiente: pip install -r requirements_v12.txt
+# No sustituye requirements.txt de V11.
+streamlit
+chromadb==1.5.9
+sentence-transformers
